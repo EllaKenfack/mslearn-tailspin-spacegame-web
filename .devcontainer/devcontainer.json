@@ -1,43 +1,51 @@
 {
-    "name": "AzurePipelines",
-    "dockerFile": "Dockerfile",
-
-    // Configure tool-specific properties.
+    "name": ".NET 8.0",
+    "image": "mcr.microsoft.com/dotnet/sdk:8.0",
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+        "ghcr.io/devcontainers/features/github-cli:1": {
+            "version": "2"
+        },
+        "ghcr.io/devcontainers/features/powershell:1": {
+            "version": "latest"
+        },
+        "ghcr.io/azure/azure-dev/azd:0": {
+            "version": "latest"
+        },
+        "ghcr.io/devcontainers/features/common-utils:2": {},
+        "ghcr.io/devcontainers/features/dotnet:2": {
+            "version": "none",
+            "dotnetRuntimeVersions": "6.0",
+            "aspNetCoreRuntimeVersions": "6.0"
+        }
+    },
     "customizations": {
-        // Configure properties specific to VS Code.
         "vscode": {
-            // Add the IDs of extensions you want installed when the container is created.
             "extensions": [
-                "ms-vscode.azurecli",
-                "ms-vscode.powershell",
-                "hashicorp.terraform",
-                "esbenp.prettier-vscode",
-                "tfsec.tfsec"
+                "ms-vscode.vscode-node-azure-pack",
+                "GitHub.vscode-github-actions",
+                "ms-dotnettools.vscode-dotnet-runtime",
+                "ms-dotnettools.csdevkit",
+                "ms-dotnetools.csharp"
             ]
         }
     },
-
-    // Use 'forwardPorts' to make a list of ports inside the container available locally.
-    // "forwardPorts": [],
-
-    // Use 'postStartCommand' to run commands each time the container is successfully started..
+    "forwardPorts": [
+        44380
+    ],
     "postStartCommand": "/home/vscode/azure-pipelines/start.sh",
-
-    // Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
-    "remoteUser": "vscode",
-    // Amend Azure Pipelines agent version and arch type with 'ARCH' and 'AGENT_VERSION'. https://github.com/microsoft/azure-pipelines-agent/releases.
-    "build": {
-        "args": {
-            "UPGRADE_PACKAGES": "true",
-            "ARCH": "x64",
-            "AGENT_VERSION": "2.206.1"
-        }
+    "hostRequirements": {
+        "memory": "8gb",
+        "cpus": 4
     },
-    "features": {
-        "terraform": "latest",
-        "azure-cli": "latest",
-        "git-lfs": "latest",
-        "github-cli": "latest",
-        "powershell": "latest"
+    "remoteEnv": {
+        "DOTNET_MULTILEVEL_LOOKUP": "0",
+        "TARGET": "net8.0"
+    },
+    "portsAttributes": {
+        "44380": {
+            "label": "App",
+            "onAutoForward": "notify"
+        }
     }
 }
